@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Inherintence</title>
+</head>
+<body>
+    <!-- Let's set up our canvas -->
+     <canvas id="myCanvas"></canvas>
+
+     <style>
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 0.2em solid green;
+        }
+     </style>
+
+     <!-- Adding logic -->
+
+     <script type="module">
+        import { Dog, Cat } from "./classes.js";
+
+        // Get canvas element
+        const canvas = document.getElementById("myCanvas");
+        // In order to work with a canvas we need a rendering context
+        const ctx = canvas.getContext("2d");
+
+        // Set the canvas size
+        canvas.width = window.innerWidth - 50;
+        canvas.height = window.innerHeight - 50;
+
+        // Time to create our instances ( dogs and cats )
+        /*
+        Now we need to create an array that will contain 8 random creatures (dogs, cats)
+        Each creature will have some random x and y coordinates on the canvas
+        */
+
+        const creatures = [];
+
+        for (let i=0; i<8; i++) {
+            const x = 5 + Math.random() * canvas.width;
+            const y = 5 + Math.random() * canvas.width;
+
+            // Let's add some randomness to how many cats/dogs are created using a ternary
+            // We use the "new" keyword to create instances of Cats and Dogs
+            const creature = Math.random() > 0.5 ? new Dog (x,y) : new Cat(x,y);
+
+            // Pushing newly created animal in the array
+            creatures.push( creature )
+            // console.log(creature)
+            console.log(creatures)
+
+            // Define animation logic
+            function animate(){
+                // Clear the canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                /*
+                We need to iterate over the creatures array
+                for each array item (dog, cat) we run the "move" method to update its x,y cordinates
+                we then run "draw" to write "cat" "dog" to the canvas
+                */
+
+                creatures.forEach( creature => {
+                    creature.move(canvas); //  Update your animation state 
+                    creature.draw( ctx ); // to draw the text
+
+                })
+
+                requestAnimationFrame( animate );
+            }
+            
+            animate();
+        }
+
+
+     </script>
+</body>
+</html>
